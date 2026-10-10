@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozy Thought Garden Studio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'garden-bg-start': '#EAF1F7',
+                        'garden-bg-end': '#F0F5F9',
+                        'canvas-paper': '#FAF8F3',
+                        'accent-dusty': '#A9BBC8',
+                        'accent-slate': '#5F7382',
+                        'accent-sage': '#556B2F',
+                        'accent-charcoal': '#3D4E5B',
+                        'border-mist': '#DCE4E8',
+                        'border-cloud': '#C9D1D5',
+                    },
+                    fontFamily: {
+                        quicksand: ['Quicksand', 'sans-serif'],
+                        nunito: ['Nunito', 'sans-serif'],
+                    },
+                    animation: {
+                        'float-slow': 'float 6s ease-in-out infinite',
+                        'breathe': 'breathe 4s ease-in-out infinite',
+                        'twinkle': 'twinkle 2s ease-in-out infinite',
+                        'pulse-gentle': 'pulseGentle 3s ease-in-out infinite',
+                        'hop': 'hop 0.6s ease-in-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        },
+                        breathe: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.02)' },
+                        },
+                        twinkle: {
+                            '0%, 100%': { opacity: '0.3' },
+                            '50%': { opacity: '1' },
+                        },
+                        pulseGentle: {
+                            '0%, 100%': { opacity: '0.85' },
+                            '50%': { opacity: '1' },
+                        },
+                        hop: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-18px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom CSS for Texture Backdrops & Custom Scrollbars -->
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: #3D4E5B;
+            background: linear-gradient(180deg, #EAF1F7 0%, #F0F5F9 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        /* Paper Textures */
+        .texture-grid {
+            background-color: #FAF8F3;
+            background-image: radial-gradient(#C9D1D5 1.2px, transparent 1.2px);
+            background-size: 20px 20px;
+        }
+
+        .texture-paper {
+            background-color: #FAF8F3;
+            background-image: linear-gradient(#f1eee6 1px, transparent 1px);
+            background-size: 100% 28px;
+        }
+
+        .texture-stardust {
+            background-color: #1A2332;
+            color: #E2E8F0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        .texture-kraft {
+            background-color: #EFE4D1;
+            background-image: repeating-linear-gradient(0deg, rgba(160, 130, 90, 0.05), rgba(160, 130, 90, 0.05) 1px, transparent 1px, transparent 24px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(220, 228, 232, 0.4);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #A9BBC8;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5F7382;
+        }
+
+        /* Soft Card Shadow & Glassmorphism */
+        .cozy-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(220, 228, 232, 0.8);
+            box-shadow: 0 8px 30px rgba(80, 110, 130, 0.08);
+            border-radius: 24px;
+        }
+
+        .cozy-glass {
+            background: rgba(250, 248, 243, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Animated Rain drops */
+        .rain-particle {
+            position: absolute;
+            background: rgba(169, 187, 200, 0.6);
+            width: 2px;
+            height: 14px;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: fall 1.2s linear infinite;
+        }
+
+        @keyframes fall {
+            from { transform: translateY(-20px); }
+            to { transform: translateY(300px); }
+        }
+
+        /* Star twinkle particles */
+        .star-particle {
+            position: absolute;
+            background: #FFF;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen selection:bg-accent-dusty selection:text-white">
+
+    <!-- Application Header -->
+    <header class="sticky top-0 z-40 w-full px-4 py-3 cozy-glass border-b border-border-mist/60 transition-all">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+            
+            <!-- Brand & Icon -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('garden')">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-accent-sage to-accent-slate flex items-center justify-center text-white shadow-md shadow-accent-sage/20 transition-transform hover:scale-105">
+                    <i data-lucide="sprout" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold text-accent-charcoal tracking-tight flex items-center gap-2">
+                        Cozy Thought Garden
+                        <span class="hidden md:inline-block px-2 py-0.5 text-xs font-semibold bg-accent-dusty/20 text-accent-slate rounded-full border border-accent-dusty/30">Studio</span>
+                    </h1>
+                    <p class="text-[11px] text-accent-slate/80 hidden sm:block">Mindful Digital Sanctuary & Daily Journal</p>
+                </div>
+            </div>
+
+            <!-- Central Route Switcher -->
+            <div class="flex items-center bg-accent-dusty/15 p-1 rounded-full border border-border-mist/80">
+                <button id="nav-btn-garden" onclick="switchTab('garden')" class="flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 bg-white text-accent-charcoal shadow-sm">
+                    <i data-lucide="flower-2" class="w-4 h-4 text-accent-sage"></i>
+                    <span>Garden Home</span>
+                </button>
+                <button id="nav-btn-studio" onclick="switchTab('studio')" class="flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 text-accent-slate hover:text-accent-charcoal">
+                    <i data-lucide="pen-tool" class="w-4 h-4"></i>
+                    <span>Writing Studio</span>
+                </button>
+            </div>
+
+            <!-- Weather, Streak & Archive Controls -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                
+                <!-- Streak Badge -->
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 text-xs sm:text-sm font-bold shadow-xs">
+                    <span class="animate-bounce">🔥</span>
+                    <span id="header-streak-count">12</span>
+                    <span class="hidden lg:inline text-amber-700/80 font-medium">Day Streak</span>
+                </div>
+
+                <!-- Dynamic Weather Badge -->
+                <div id="weather-badge" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-accent-slate text-xs font-medium cursor-pointer hover:bg-blue-500/15 transition-colors" onclick="fetchLiveWeather()" title="Click to refresh local weather">
+                    <span id="weather-icon"><i data-lucide="sun" class="w-3.5 h-3.5 text-amber-500"></i></span>
+                    <span id="weather-text" class="truncate max-w-[140px]">Kyoto • 22°C</span>
+                </div>
+
+                <!-- Curated Archive Drawer Button -->
+                <button onclick="toggleArchiveModal(true)" class="p-2 rounded-full bg-white/80 border border-border-mist text-accent-slate hover:text-accent-charcoal hover:bg-white transition-all shadow-xs" title="Most Shared Thoughts Archive">
+                    <i data-lucide="book-marked" class="w-4 h-4"></i>
+                </button>
+
+                <!-- Profile Avatar -->
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-accent-dusty to-accent-slate p-0.5 shadow-sm cursor-pointer hover:ring-2 hover:ring-accent-sage/40 transition-all" onclick="openProfileModal()">
+                    <div class="w-full h-full rounded-full bg-white flex items-center justify-center font-bold text-xs text-accent-charcoal">
+                        💬
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER WITH SPA SCREEN SWITCHING -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
+
+        <!-- ========================================== -->
+        <!-- SCREEN 1: DYNAMIC GARDEN HOME VIEW -->
+        <!-- ========================================== -->
+        <section id="screen-garden" class="space-y-6 transition-opacity duration-300">
+
+            <!-- Dynamic Sky & Weather Display Layer -->
+            <div id="sky-viewport" class="relative rounded-3xl overflow-hidden p-6 sm:p-8 transition-all duration-700 bg-gradient-to-b from-sky-200/70 via-indigo-100/40 to-emerald-50/60 border border-white/80 shadow-lg min-h-[340px] flex flex-col justify-between">
+                
+                <!-- Atmospheric Background Elements -->
+                <div id="sky-decorations" class="absolute inset-0 pointer-events-none overflow-hidden">
+                    <!-- Day Sun & Sunbeams -->
+                    <div id="sun-element" class="absolute top-6 right-10 w-24 h-24 rounded-full bg-amber-200/80 blur-xl animate-pulse-gentle"></div>
+                    <div id="sun-core" class="absolute top-10 right-14 w-16 h-16 rounded-full bg-gradient-to-br from-amber-300 to-yellow-100 shadow-lg shadow-amber-200/50"></div>
+                    
+                    <!-- SVG Clouds -->
+                    <svg class="absolute top-8 left-12 w-28 h-12 text-white/80 animate-float-slow" fill="currentColor" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                    <svg class="absolute top-16 right-1/3 w-36 h-14 text-white/60 animate-float-slow" style="animation-delay: 2s;" fill="currentColor" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                    
+                    <!-- Rain container (toggled via JS) -->
+                    <div id="rain-particles-container" class="hidden absolute inset-0"></div>
+                    <!-- Stars container (toggled via JS) -->
+                    <div id="star-particles-container" class="hidden absolute inset-0"></div>
+                </div>
+
+                <!-- Sky Header Bar & Manual Viewport Toggle -->
+                <div class="relative z-10 flex flex-wrap items-center justify-between gap-3 bg-white/40 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/60">
+                    <div class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-accent-charcoal">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-accent-sage"></i>
+                        <span id="sky-location-label">Kyoto Sanctuary</span>
+                        <span class="text-accent-slate/60">•</span>
+                        <span id="sky-weather-desc" class="text-accent-slate font-medium">⛅ Sunbeams & Mild Breeze (22°C)</span>
+                    </div>
+
+                    <!-- Atmospheric Toggle -->
+                    <div class="flex items-center bg-white/70 rounded-full p-1 border border-border-mist shadow-xs text-xs">
+                        <button id="toggle-day-btn" onclick="setSkyAtmosphere('day')" class="px-3 py-1 rounded-full font-bold bg-amber-100 text-amber-800 transition-all">
+                            ☀️ Day Haven
+                        </button>
+                        <button id="toggle-rain-btn" onclick="setSkyAtmosphere('rain')" class="px-3 py-1 rounded-full text-accent-slate hover:text-accent-charcoal transition-all">
+                            🌧️ Overcast
+                        </button>
+                        <button id="toggle-night-btn" onclick="setSkyAtmosphere('night')" class="px-3 py-1 rounded-full text-accent-slate hover:text-accent-charcoal transition-all">
+                            ✨ Midnight
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Centerpiece: Sanctuary Tree & Habit Visual Anchor -->
+                <div class="relative z-10 my-4 flex flex-col items-center justify-center text-center">
+                    
+                    <!-- Dynamic Tree SVG Container -->
+                    <div id="tree-container" class="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center transition-all duration-500">
+                        <!-- Rendered via JS based on stage: Seed, Sprout, Sapling, Flowering -->
+                    </div>
+
+                    <!-- Stage Pill Badge -->
+                    <div class="mt-2 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-accent-dusty/40 shadow-sm text-xs sm:text-sm font-bold text-accent-charcoal">
+                        <span id="tree-stage-icon">🌸</span>
+                        <span id="tree-stage-title">Flowering Tree</span>
+                        <span class="text-accent-slate/40">•</span>
+                        <span id="tree-stage-subtitle" class="text-accent-slate font-normal">12 Days Blooming</span>
+                    </div>
+                </div>
+
+                <!-- Action Dock Directly Under Tree -->
+                <div class="relative z-10 flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <button onclick="switchTab('studio')" class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent-sage text-white font-bold text-sm shadow-md shadow-accent-sage/30 hover:bg-opacity-90 hover:scale-105 transition-all">
+                        <i data-lucide="edit-3" class="w-4 h-4"></i>
+                        <span>✍️ Write Thought</span>
+                    </button>
+                    
+                    <button onclick="openCameraModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/90 border border-border-mist text-accent-charcoal font-semibold text-sm shadow-xs hover:bg-white hover:scale-105 transition-all">
+                        <i data-lucide="camera" class="w-4 h-4 text-accent-slate"></i>
+                        <span>📸 Snap Media</span>
+                    </button>
+
+                    <button onclick="openDrawModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/90 border border-border-mist text-accent-charcoal font-semibold text-sm shadow-xs hover:bg-white hover:scale-105 transition-all">
+                        <i data-lucide="palette" class="w-4 h-4 text-accent-slate"></i>
+                        <span>🎨 Draw Companion</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Dynamic Stats Summary Bar -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="cozy-card p-4 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-accent-sage flex items-center justify-center">
+                        <i data-lucide="book-open" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-accent-slate font-medium">Thoughts Planted</p>
+                        <h3 id="stat-thoughts-count" class="text-xl font-bold text-accent-charcoal">28</h3>
+                    </div>
+                </div>
+
+                <div class="cozy-card p-4 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                        <i data-lucide="flame" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-accent-slate font-medium">Habit Streak</p>
+                        <h3 id="stat-streak-count" class="text-xl font-bold text-accent-charcoal">12 Days</h3>
+                    </div>
+                </div>
+
+                <div class="cozy-card p-4 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                        <i data-lucide="smile" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-accent-slate font-medium">Active Companions</p>
+                        <h3 id="stat-companions-count" class="text-xl font-bold text-accent-charcoal">2 Nurturing</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column Section: Thoughts Feed (Left) & Streak Ledger (Right) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Left Column: Planted Thoughts Stream (8 cols) -->
+                <div class="lg:col-span-8 space-y-4">
+                    <div class="flex items-center justify-between px-1">
+                        <h2 class="text-lg font-bold text-accent-charcoal flex items-center gap-2">
+                            <i data-lucide="trees" class="w-5 h-5 text-accent-sage"></i>
+                            <span>Planted Thoughts & Reflections</span>
+                        </h2>
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="text-accent-slate">Filter:</span>
+                            <select id="filter-category" onchange="renderThoughtsFeed()" class="bg-white/80 border border-border-mist rounded-xl px-2.5 py-1 text-xs font-semibold text-accent-charcoal outline-none focus:ring-1 focus:ring-accent-dusty">
+                                <option value="All">All Topics</option>
+                                <option value="Daily Reflections">Daily Reflections</option>
+                                <option value="Gratitude">Gratitude</option>
+                                <option value="Creative Flow">Creative Flow</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Feed Container -->
+                    <div id="thoughts-feed" class="space-y-4">
+                        <!-- Dynamic Thought Cards populated via JS -->
+                    </div>
+                </div>
+
+                <!-- Right Column: Streak History & Resonance Panel (4 cols) -->
+                <div class="lg:col-span-4 space-y-6">
+                    
+                    <!-- Garden Soil Resonance Meter -->
+                    <div class="cozy-card p-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-accent-charcoal text-sm flex items-center gap-2">
+                                <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+                                <span>Garden Soil Resonance</span>
+                            </h3>
+                            <span id="soil-percent-label" class="text-xs font-bold text-accent-sage">80% Rich</span>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-border-mist/60 rounded-full h-3 overflow-hidden p-0.5">
+                            <div id="soil-progress-bar" class="bg-gradient-to-r from-accent-slate via-accent-sage to-amber-400 h-full rounded-full transition-all duration-500" style="width: 80%"></div>
+                        </div>
+
+                        <p class="text-xs text-accent-slate leading-relaxed">
+                            Every daily entry enriches the soil mist. <span class="font-semibold text-accent-charcoal">2 days remaining</span> until the next seasonal blossom event!
+                        </p>
+                    </div>
+
+                    <!-- Streak History Ledger Table -->
+                    <div class="cozy-card p-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-accent-charcoal text-sm flex items-center gap-2">
+                                <i data-lucide="calendar" class="w-4 h-4 text-accent-slate"></i>
+                                <span>Streak Milestones</span>
+                            </h3>
+                            <span class="text-xs text-accent-slate">Last 7 Check-ins</span>
+                        </div>
+
+                        <div class="overflow-hidden rounded-2xl border border-border-mist/70 bg-white/60">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-accent-dusty/15 text-accent-slate font-bold">
+                                    <tr>
+                                        <th class="p-2.5">Day</th>
+                                        <th class="p-2.5">Date</th>
+                                        <th class="p-2.5">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="streak-ledger-body" class="divide-y divide-border-mist/50 text-accent-charcoal font-medium">
+                                    <!-- Rendered dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Nurtured Companions Gallery -->
+                    <div class="cozy-card p-5 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-accent-charcoal text-sm flex items-center gap-2">
+                                <i data-lucide="heart" class="w-4 h-4 text-rose-400"></i>
+                                <span>Sanctuary Companions</span>
+                            </h3>
+                            <button onclick="openDrawModal()" class="text-xs text-accent-sage font-bold hover:underline">+ New</button>
+                        </div>
+
+                        <div id="companions-list" class="grid grid-cols-2 gap-3">
+                            <!-- Custom drawn and baseline companions list -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 2: WRITING STUDIO & COMPANION VIEW -->
+        <!-- ========================================== -->
+        <section id="screen-studio" class="hidden space-y-6 transition-opacity duration-300">
+
+            <!-- Breadcrumb Navigation & Environmental Header -->
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-white/60 p-4 rounded-2xl border border-border-mist">
+                <button onclick="switchTab('garden')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold text-accent-slate hover:text-accent-charcoal hover:bg-white transition-all">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Back to Garden Sanctuary</span>
+                </button>
+
+                <div class="flex items-center gap-2 text-xs font-semibold text-accent-slate">
+                    <i data-lucide="feather" class="w-4 h-4 text-accent-sage"></i>
+                    <span>Quiet Botanical Parchment</span>
+                    <span>•</span>
+                    <span id="autosave-status-text" class="text-emerald-600">Draft autosaved to local storage</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Main Studio Parchment Canvas (8 cols) -->
+                <div class="lg:col-span-8 space-y-4">
+                    
+                    <!-- Parchment Box -->
+                    <div id="studio-paper-box" class="cozy-card texture-grid p-6 sm:p-8 rounded-3xl min-h-[500px] flex flex-col justify-between transition-all duration-300 shadow-md">
+                        
+                        <div class="space-y-4">
+                            
+                            <!-- Category Selector & Prompt Trigger -->
+                            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border-mist/60 pb-3">
+                                <select id="thought-category" class="bg-white/80 border border-border-mist rounded-xl px-3 py-1.5 text-xs font-bold text-accent-charcoal outline-none focus:ring-2 focus:ring-accent-dusty">
+                                    <option value="Daily Reflections">🌿 Daily Reflections</option>
+                                    <option value="Gratitude">🌸 Gratitude</option>
+                                    <option value="Creative Flow">💡 Creative Flow</option>
+                                    <option value="Unfiltered Thoughts">🍃 Unfiltered Thoughts</option>
+                                </select>
+
+                                <!-- Texture Themes Switcher -->
+                                <div class="flex items-center gap-1.5 bg-white/80 p-1 rounded-full border border-border-mist text-xs">
+                                    <button onclick="setParchmentTheme('texture-grid')" class="px-2.5 py-1 rounded-full hover:bg-slate-100 font-semibold" title="Cozy Grid">Grid</button>
+                                    <button onclick="setParchmentTheme('texture-paper')" class="px-2.5 py-1 rounded-full hover:bg-slate-100 font-semibold" title="Garden Paper">Paper</button>
+                                    <button onclick="setParchmentTheme('texture-stardust')" class="px-2.5 py-1 rounded-full hover:bg-slate-100 font-semibold" title="Midnight Stardust">Stardust</button>
+                                    <button onclick="setParchmentTheme('texture-kraft')" class="px-2.5 py-1 rounded-full hover:bg-slate-100 font-semibold" title="Vintage Kraft">Kraft</button>
+                                </div>
+                            </div>
+
+                            <!-- Title Input -->
+                            <input id="thought-title-input" type="text" placeholder="Title your reflection..." class="w-full bg-transparent border-none text-xl sm:text-2xl font-bold font-heading text-accent-charcoal placeholder:text-accent-slate/50 outline-none focus:ring-0">
+
+                            <!-- Text Area -->
+                            <textarea id="thought-content-input" oninput="handleStudioWritingInput()" placeholder="Pour your quiet thoughts onto the parchment... How does your garden feel today?" class="w-full h-64 bg-transparent border-none text-sm sm:text-base text-accent-charcoal placeholder:text-accent-slate/40 outline-none focus:ring-0 resize-none leading-relaxed"></textarea>
+
+                        </div>
+
+                        <!-- Whispers of the Soil Clickable Prompts -->
+                        <div class="pt-4 border-t border-border-mist/60 space-y-2">
+                            <span class="text-xs font-bold text-accent-slate flex items-center gap-1">
+                                <i data-lucide="sparkle" class="w-3.5 h-3.5 text-amber-500"></i> Whispers of the Soil (Click to prompt):
+                            </span>
+                            <div class="flex flex-wrap gap-2 text-xs">
+                                <button onclick="insertPrompt('Today I feel deeply grateful for ')" class="px-3 py-1 rounded-full bg-white/70 border border-border-mist hover:bg-white text-accent-charcoal font-medium transition-colors">
+                                    🌸 Today I feel grateful for...
+                                </button>
+                                <button onclick="insertPrompt('A quiet spark of an idea I want to nurture is ')" class="px-3 py-1 rounded-full bg-white/70 border border-border-mist hover:bg-white text-accent-charcoal font-medium transition-colors">
+                                    💡 A quiet idea I want to build...
+                                </button>
+                                <button onclick="insertPrompt('Releasing the stress of ')" class="px-3 py-1 rounded-full bg-white/70 border border-border-mist hover:bg-white text-accent-charcoal font-medium transition-colors">
+                                    🍃 Releasing the heavy feeling of...
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Attachments & Publishing Bar -->
+                    <div class="cozy-card p-4 flex flex-wrap items-center justify-between gap-4">
+                        
+                        <!-- Media Attachments & Ambient Sound -->
+                        <div class="flex items-center gap-3">
+                            <!-- Image Attachment Button -->
+                            <label class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-border-mist text-xs font-semibold text-accent-charcoal cursor-pointer hover:bg-slate-50 transition-colors">
+                                <i data-lucide="image" class="w-4 h-4 text-accent-slate"></i>
+                                <span id="attachment-label">Attach Photo</span>
+                                <input type="file" id="studio-photo-file" accept="image/*" class="hidden" onchange="handlePhotoAttachment(event)">
+                            </label>
+
+                            <!-- Ambient Audio Controls -->
+                            <button id="ambient-audio-btn" onclick="toggleAmbientSound()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-border-mist text-xs font-semibold text-accent-charcoal hover:bg-slate-50 transition-colors">
+                                <i data-lucide="cloud-rain" class="w-4 h-4 text-accent-slate"></i>
+                                <span id="ambient-audio-text">Play Greenhouse Rain</span>
+                            </button>
+                        </div>
+
+                        <!-- Live Metrics & Save CTA -->
+                        <div class="flex items-center gap-4">
+                            <div class="text-right text-xs text-accent-slate hidden sm:block">
+                                <div><span id="live-word-count" class="font-bold text-accent-charcoal">0</span> words</div>
+                                <div><span id="live-read-time" class="font-medium">0 min</span> read</div>
+                            </div>
+
+                            <button onclick="publishThoughtToGarden()" class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-accent-sage text-white font-bold text-sm shadow-md shadow-accent-sage/30 hover:scale-105 transition-all">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                                <span>Share Thought to Garden</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Interactive Baseline Companion - Barnaby 🐸 (4 cols) -->
+                <div class="lg:col-span-4 space-y-6">
+                    
+                    <div class="cozy-card p-6 space-y-5 text-center flex flex-col items-center justify-center relative overflow-hidden">
+                        <div class="w-full flex items-center justify-between text-xs text-accent-slate font-bold">
+                            <span class="flex items-center gap-1"><i data-lucide="bot" class="w-3.5 h-3.5"></i> Muse Companion</span>
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Active</span>
+                        </div>
+
+                        <!-- SVG Animated Frog Container -->
+                        <div id="barnaby-svg-wrapper" class="relative w-40 h-40 flex items-center justify-center my-2 transition-transform duration-300">
+                            <!-- SVG Rendered via JS -->
+                        </div>
+
+                        <!-- Bio-Rhythm Telemetry Telemetry Display -->
+                        <div class="w-full space-y-2 bg-white/70 p-3 rounded-2xl border border-border-mist/60 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-accent-slate">Companion Name:</span>
+                                <span class="font-bold text-accent-charcoal">Barnaby the Pond Muse 🐸</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-accent-slate">Emotional State:</span>
+                                <span id="frog-sentiment-label" class="font-bold text-emerald-600">Peaceful / Idle</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-accent-slate">Heart Rhythm:</span>
+                                <span id="frog-heart-rate" class="font-bold text-accent-charcoal">72 bpm • Calm</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-accent-slate">Soil Attunement:</span>
+                                <span class="font-bold text-accent-sage">100% In Tune</span>
+                            </div>
+                        </div>
+
+                        <p id="frog-speech-bubble" class="text-xs text-accent-charcoal italic bg-amber-50 p-2.5 rounded-2xl border border-amber-200/60 w-full animate-pulse-gentle">
+                            "Ribbit... I am listening to your thoughts. Type away to awaken my spirits!"
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODALS & DRAWERS -->
+    <!-- ========================================== -->
+
+    <!-- 1. FREEHAND CANVAS DRAW COMPANION MODAL -->
+    <div id="modal-draw" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="cozy-card w-full max-w-md p-6 space-y-4 bg-white shadow-2xl rounded-3xl animate-breathe">
+            <div class="flex items-center justify-between border-b border-border-mist pb-3">
+                <h3 class="font-bold text-base text-accent-charcoal flex items-center gap-2">
+                    <i data-lucide="palette" class="w-5 h-5 text-accent-sage"></i>
+                    <span>Draw New Garden Companion</span>
+                </h3>
+                <button onclick="closeDrawModal()" class="text-accent-slate hover:text-accent-charcoal"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <!-- Canvas -->
+            <div class="relative w-full aspect-square bg-amber-50/50 rounded-2xl border-2 border-dashed border-accent-dusty/50 overflow-hidden">
+                <canvas id="companion-canvas" width="350" height="350" class="w-full h-full cursor-crosshair"></canvas>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <input type="color" id="brush-color" value="#556B2F" class="w-8 h-8 rounded-full cursor-pointer border-none">
+                    <input type="range" id="brush-size" min="2" max="20" value="6" class="w-20 accent-accent-sage">
+                </div>
+                <button onclick="clearCompanionCanvas()" class="text-xs font-semibold text-rose-500 hover:underline">Clear Canvas</button>
+            </div>
+
+            <input id="companion-name-input" type="text" placeholder="Name your spirit creature (e.g. Pip the Moth)..." class="w-full px-3 py-2 text-xs rounded-xl border border-border-mist focus:outline-none focus:ring-1 focus:ring-accent-sage">
+
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button onclick="closeDrawModal()" class="px-4 py-2 text-xs font-bold text-accent-slate hover:bg-slate-100 rounded-xl">Cancel</button>
+                <button onclick="saveDrawnCompanion()" class="px-5 py-2 text-xs font-bold bg-accent-sage text-white rounded-xl shadow-sm hover:scale-105 transition-all">Save Companion</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. CAMERA SNAP MODAL -->
+    <div id="modal-camera" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="cozy-card w-full max-w-md p-6 space-y-4 bg-white shadow-2xl rounded-3xl">
+            <div class="flex items-center justify-between border-b border-border-mist pb-3">
+                <h3 class="font-bold text-base text-accent-charcoal flex items-center gap-2">
+                    <i data-lucide="camera" class="w-5 h-5 text-accent-sage"></i>
+                    <span>Snap Garden Moment</span>
+                </h3>
+                <button onclick="closeCameraModal()" class="text-accent-slate hover:text-accent-charcoal"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <div class="space-y-3">
+                <label class="flex flex-col items-center justify-center w-full h-44 border-2 border-dashed border-accent-dusty/60 rounded-2xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
+                    <div id="camera-upload-placeholder" class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <i data-lucide="upload-cloud" class="w-8 h-8 text-accent-slate mb-2"></i>
+                        <p class="text-xs font-bold text-accent-charcoal">Click to upload photo snippet</p>
+                        <p class="text-[10px] text-accent-slate">PNG, JPG or WebP up to 5MB</p>
+                    </div>
+                    <img id="camera-preview-img" class="hidden w-full h-full object-cover rounded-2xl">
+                    <input type="file" id="camera-file-input" accept="image/*" class="hidden" onchange="previewCameraUpload(event)">
+                </label>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button onclick="closeCameraModal()" class="px-4 py-2 text-xs font-bold text-accent-slate hover:bg-slate-100 rounded-xl">Cancel</button>
+                <button onclick="attachCameraToStudio()" class="px-5 py-2 text-xs font-bold bg-accent-sage text-white rounded-xl shadow-sm hover:scale-105 transition-all">Use in Writing Studio</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. CURATED ARCHIVE DRAWER ("Most Shared Thoughts") -->
+    <div id="drawer-archive" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex justify-end">
+        <div class="w-full max-w-md h-full bg-white shadow-2xl p-6 flex flex-col justify-between space-y-4 overflow-y-auto transform transition-transform">
+            
+            <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-border-mist pb-3">
+                    <h3 class="font-bold text-lg text-accent-charcoal flex items-center gap-2">
+                        <i data-lucide="book-marked" class="w-5 h-5 text-accent-sage"></i>
+                        <span>📚 Most Shared Thoughts</span>
+                    </h3>
+                    <button onclick="toggleArchiveModal(false)" class="text-accent-slate hover:text-accent-charcoal"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+
+                <p class="text-xs text-accent-slate">Curated sanctuary thoughts sorted by community resonances and gentle feedback.</p>
+
+                <div id="archive-thoughts-list" class="space-y-3">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <button onclick="toggleArchiveModal(false)" class="w-full py-2.5 rounded-xl bg-accent-dusty/20 text-accent-charcoal font-bold text-xs hover:bg-accent-dusty/30 transition-colors">
+                Close Drawer
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           DATA PERSISTENCE & INITIAL STATE
+           ========================================================================== */
+        
+        const DEFAULT_STATE = {
+            userProfile: {
+                name: "Botanical Wanderer",
+                streak: 12,
+                lastPostedDate: new Date().toISOString().split('T')[0],
+                soilEnrichment: 80,
+                currentStage: "Flowering Tree"
+            },
+            companions: [
+                {
+                    id: "comp_01",
+                    name: "Barnaby the Pond Muse",
+                    type: "baseline",
+                    avatar: "🐸",
+                    createdDate: "2024-10-01"
+                },
+                {
+                    id: "comp_02",
+                    name: "Pip the Dewdrop Moth",
+                    type: "custom",
+                    avatar: "🦋",
+                    createdDate: "2024-10-03"
+                }
+            ],
+            thoughts: [
+                {
+                    id: "thought_101",
+                    timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
+                    title: "Nurturing Quiet Seeds of Peace",
+                    content: "I feel so grateful and happy today as I build this peaceful garden studio idea. The gentle rain outside matches the quiet hum of my cup of chamomile tea.",
+                    category: "Daily Reflections",
+                    theme: "texture-paper",
+                    tags: ["#Reflection", "#Gratitude"],
+                    mediaThumbnails: [],
+                    audioAmbientPreset: "Greenhouse Rain",
+                    resonates: 14
+                },
+                {
+                    id: "thought_102",
+                    timestamp: new Date(Date.now() - 3600000 * 28).toISOString(),
+                    title: "The Art of Digital Slow Living",
+                    content: "Stepping away from endless streams and feeds. There is profound magic in watching a single digital sprout bloom day by day through intentional reflection.",
+                    category: "Creative Flow",
+                    theme: "texture-grid",
+                    tags: ["#Mindfulness", "#SlowTech"],
+                    mediaThumbnails: [],
+                    audioAmbientPreset: "None",
+                    resonates: 22
+                }
+            ],
+            streakHistory: [
+                { day: "Day 12", date: "Today", status: "Completed", icon: "🌸" },
+                { day: "Day 11", date: "Yesterday", status: "Completed", icon: "🌱" },
+                { day: "Day 10", date: "Oct 8", status: "Completed", icon: "🌱" },
+                { day: "Day 09", date: "Oct 7", status: "Completed", icon: "🌱" },
+                { day: "Day 08", date: "Oct 6", status: "Completed", icon: "🌱" },
+                { day: "Day 07", date: "Oct 5", status: "Completed", icon: "🌱" },
+                { day: "Day 06", date: "Oct 4", status: "Completed", icon: "🌱" }
+            ],
+            settings: {
+                weatherLocation: { lat: 35.0116, lon: 135.7681, city: "Kyoto Sanctuary" },
+                currentSky: "day",
+                soundVolume: 0.35
+            }
+        };
+
+        // Application Global State
+        let appState = JSON.parse(localStorage.getItem('cozy_garden_state')) || DEFAULT_STATE;
+
+        function saveState() {
+            localStorage.setItem('cozy_garden_state', JSON.stringify(appState));
+            updateUI();
+        }
+
+        /* ==========================================================================
+           TAB ROUTING & NAVIGATION
+           ========================================================================== */
+        function switchTab(tabName) {
+            const screenGarden = document.getElementById('screen-garden');
+            const screenStudio = document.getElementById('screen-studio');
+            const btnGarden = document.getElementById('nav-btn-garden');
+            const btnStudio = document.getElementById('nav-btn-studio');
+
+            if (tabName === 'garden') {
+                screenGarden.classList.remove('hidden');
+                screenStudio.classList.add('hidden');
+                
+                btnGarden.className = "flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 bg-white text-accent-charcoal shadow-sm";
+                btnStudio.className = "flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 text-accent-slate hover:text-accent-charcoal";
+            } else {
+                screenStudio.classList.remove('hidden');
+                screenGarden.classList.add('hidden');
+
+                btnStudio.className = "flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 bg-white text-accent-charcoal shadow-sm";
+                btnGarden.className = "flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 text-accent-slate hover:text-accent-charcoal";
+                
+                // Trigger initial frog emotion check
+                handleStudioWritingInput();
+            }
+        }
+
+        /* ==========================================================================
+           WEATHER API ENGINE (OPEN-METEO REST API INTEGRATION)
+           ========================================================================== */
+        async function fetchLiveWeather() {
+            const badgeText = document.getElementById('weather-text');
+            const badgeIcon = document.getElementById('weather-icon');
+            const skyLocation = document.getElementById('sky-location-label');
+            const skyDesc = document.getElementById('sky-weather-desc');
+
+            badgeText.innerText = "Syncing weather...";
+
+            // Use browser geolocation if available, fallback to Kyoto
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        await queryOpenMeteo(lat, lon, "Your Sanctuary");
+                    },
+                    async () => {
+                        // Fallback to Kyoto Sanctuary
+                        await queryOpenMeteo(35.0116, 135.7681, "Kyoto Sanctuary");
+                    }
+                );
+            } else {
+                await queryOpenMeteo(35.0116, 135.7681, "Kyoto Sanctuary");
+            }
+        }
+
+        async function queryOpenMeteo(lat, lon, cityName) {
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                const data = await res.json();
+                
+                if (data && data.current_weather) {
+                    const temp = Math.round(data.current_weather.temperature);
+                    const code = data.current_weather.weathercode;
+                    const weatherInfo = parseWMOCode(code);
+
+                    document.getElementById('weather-text').innerText = `${cityName} • ${temp}°C`;
+                    document.getElementById('sky-location-label').innerText = cityName;
+                    document.getElementById('sky-weather-desc').innerText = `${weatherInfo.label} (${temp}°C)`;
+
+                    // Set sky theme based on weather condition
+                    if (weatherInfo.isRain) {
+                        setSkyAtmosphere('rain');
+                    } else if (data.current_weather.is_day === 0) {
+                        setSkyAtmosphere('night');
+                    } else {
+                        setSkyAtmosphere('day');
+                    }
+                }
+            } catch (err) {
+                console.warn('Weather fetch error, using cozy default:', err);
+                document.getElementById('weather-text').innerText = "Kyoto • 22°C";
+            }
+        }
+
+        function parseWMOCode(code) {
+            if (code === 0) return { label: "☀️ Clear Sky & Sunbeams", isRain: false };
+            if (code >= 1 && code <= 3) return { label: "⛅ Sunbeams & Clouds", isRain: false };
+            if (code >= 51) return { label: "🌧️ Soft Mist & Rain", isRain: true };
+            return { label: "🌤️ Cozy Atmosphere", isRain: false };
+        }
+
+        function setSkyAtmosphere(mode) {
+            const skyViewport = document.getElementById('sky-viewport');
+            const rainContainer = document.getElementById('rain-particles-container');
+            const starContainer = document.getElementById('star-particles-container');
+            const sunElem = document.getElementById('sun-element');
+            const sunCore = document.getElementById('sun-core');
+
+            // Reset toggles style
+            document.getElementById('toggle-day-btn').className = "px-3 py-1 rounded-full text-accent-slate hover:text-accent-charcoal transition-all";
+            document.getElementById('toggle-rain-btn').className = "px-3 py-1 rounded-full text-accent-slate hover:text-accent-charcoal transition-all";
+            document.getElementById('toggle-night-btn').className = "px-3 py-1 rounded-full text-accent-slate hover:text-accent-charcoal transition-all";
+
+            rainContainer.classList.add('hidden');
+            starContainer.classList.add('hidden');
+
+            if (mode === 'day') {
+                document.getElementById('toggle-day-btn').className = "px-3 py-1 rounded-full font-bold bg-amber-100 text-amber-800 transition-all";
+                skyViewport.className = "relative rounded-3xl overflow-hidden p-6 sm:p-8 transition-all duration-700 bg-gradient-to-b from-sky-200/70 via-indigo-100/40 to-emerald-50/60 border border-white/80 shadow-lg min-h-[340px] flex flex-col justify-between";
+                sunElem.style.display = 'block';
+                sunCore.style.display = 'block';
+            } else if (mode === 'rain') {
+                document.getElementById('toggle-rain-btn').className = "px-3 py-1 rounded-full font-bold bg-blue-100 text-blue-800 transition-all";
+                skyViewport.className = "relative rounded-3xl overflow-hidden p-6 sm:p-8 transition-all duration-700 bg-gradient-to-b from-slate-300 via-blue-200/60 to-emerald-100/40 border border-white/80 shadow-lg min-h-[340px] flex flex-col justify-between";
+                sunElem.style.display = 'none';
+                sunCore.style.display = 'none';
+                rainContainer.classList.remove('hidden');
+                generateRainParticles();
+            } else if (mode === 'night') {
+                document.getElementById('toggle-night-btn').className = "px-3 py-1 rounded-full font-bold bg-indigo-900 text-indigo-100 transition-all";
+                skyViewport.className = "relative rounded-3xl overflow-hidden p-6 sm:p-8 transition-all duration-700 bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-800 border border-indigo-900 shadow-lg min-h-[340px] flex flex-col justify-between text-white";
+                sunElem.style.display = 'none';
+                sunCore.style.display = 'none';
+                starContainer.classList.remove('hidden');
+                generateStarParticles();
+            }
+
+            appState.settings.currentSky = mode;
+        }
+
+        function generateRainParticles() {
+            const container = document.getElementById('rain-particles-container');
+            container.innerHTML = '';
+            for (let i = 0; i < 30; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'rain-particle';
+                drop.style.left = `${Math.random() * 100}%`;
+                drop.style.animationDelay = `${Math.random() * 1.5}s`;
+                drop.style.animationDuration = `${0.8 + Math.random() * 0.8}s`;
+                container.appendChild(drop);
+            }
+        }
+
+        function generateStarParticles() {
+            const container = document.getElementById('star-particles-container');
+            container.innerHTML = '';
+            for (let i = 0; i < 40; i++) {
+                const star = document.createElement('div');
+                star.className = 'star-particle animate-twinkle';
+                star.style.width = `${1 + Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                star.style.top = `${Math.random() * 80}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                container.appendChild(star);
+            }
+        }
+
+        /* ==========================================================================
+           SANCTUARY TREE STAGE RENDERER
+           ========================================================================== */
+        function renderSanctuaryTree() {
+            const container = document.getElementById('tree-container');
+            const totalThoughts = appState.thoughts.length;
+            
+            // Determine growth stage based on streak & thought count
+            let stage = "Flowering Tree";
+            if (totalThoughts < 2) stage = "Seed";
+            else if (totalThoughts < 5) stage = "Sprout";
+            else if (totalThoughts < 10) stage = "Sapling";
+
+            appState.userProfile.currentStage = stage;
+
+            let svgContent = '';
+
+            if (stage === "Seed") {
+                svgContent = `
+                    <svg viewBox="0 0 100 100" class="w-full h-full animate-breathe">
+                        <ellipse cx="50" cy="80" rx="30" ry="8" fill="#5F7382" opacity="0.3"/>
+                        <path d="M45 75 C48 70, 52 70, 55 75 Z" fill="#3D4E5B"/>
+                        <circle cx="50" cy="74" r="5" fill="#556B2F"/>
+                    </svg>`;
+            } else if (stage === "Sprout") {
+                svgContent = `
+                    <svg viewBox="0 0 100 100" class="w-full h-full animate-breathe">
+                        <ellipse cx="50" cy="85" rx="35" ry="8" fill="#5F7382" opacity="0.3"/>
+                        <path d="M50 85 C50 65, 48 55, 50 45" stroke="#556B2F" stroke-width="4" stroke-linecap="round" fill="none"/>
+                        <path d="M50 55 C40 50, 35 40, 40 35 C48 35, 50 48, 50 55 Z" fill="#556B2F"/>
+                        <path d="M50 50 C60 45, 65 35, 60 30 C52 30, 50 43, 50 50 Z" fill="#7C984C"/>
+                    </svg>`;
+            } else if (stage === "Sapling") {
+                svgContent = `
+                    <svg viewBox="0 0 100 100" class="w-full h-full animate-breathe">
+                        <ellipse cx="50" cy="88" rx="40" ry="10" fill="#5F7382" opacity="0.3"/>
+                        <path d="M50 88 Q48 60 50 35" stroke="#3D4E5B" stroke-width="6" stroke-linecap="round" fill="none"/>
+                        <circle cx="50" cy="35" r="22" fill="#556B2F" opacity="0.9"/>
+                        <circle cx="42" cy="28" r="16" fill="#7C984C"/>
+                        <circle cx="60" cy="32" r="14" fill="#A9BBC8" opacity="0.8"/>
+                    </svg>`;
+            } else {
+                // Flowering Tree (Full Bloom)
+                svgContent = `
+                    <svg viewBox="0 0 120 120" class="w-full h-full animate-breathe">
+                        <ellipse cx="60" cy="102" rx="45" ry="10" fill="#5F7382" opacity="0.3"/>
+                        <!-- Trunk -->
+                        <path d="M60 102 C56 75, 52 60, 60 38 M60 65 Q72 55 80 50 M60 75 Q45 68 38 60" stroke="#3D4E5B" stroke-width="7" stroke-linecap="round" fill="none"/>
+                        
+                        <!-- Foliage Canopy -->
+                        <circle cx="60" cy="38" r="28" fill="#556B2F"/>
+                        <circle cx="42" cy="35" r="22" fill="#7C984C"/>
+                        <circle cx="78" cy="38" r="20" fill="#7C984C"/>
+                        <circle cx="60" cy="22" r="20" fill="#91A95E"/>
+
+                        <!-- Blossom Sakura Dots -->
+                        <circle cx="40" cy="28" r="4" fill="#FFC0CB"/>
+                        <circle cx="72" cy="30" r="5" fill="#FFE4E1"/>
+                        <circle cx="58" cy="18" r="4.5" fill="#FFC0CB"/>
+                        <circle cx="82" cy="42" r="3.5" fill="#FFC0CB"/>
+                        <circle cx="48" cy="45" r="4" fill="#FFE4E1"/>
+
+                        <!-- Lantern Hanging -->
+                        <line x1="80" y1="50" x2="80" y2="60" stroke="#3D4E5B" stroke-width="1.5"/>
+                        <circle cx="80" cy="63" r="4" fill="#FFD700" class="animate-pulse"/>
+                    </svg>`;
+            }
+
+            container.innerHTML = svgContent;
+            document.getElementById('tree-stage-title').innerText = stage;
+            document.getElementById('tree-stage-subtitle').innerText = `${appState.userProfile.streak} Days Blooming`;
+        }
+
+        /* ==========================================================================
+           BARNABY THE POND MUSE (SENTIMENT ENGINE & REAL-TIME INTERACTION)
+           ========================================================================== */
+        function renderBarnabyFrog(sentiment = 'idle') {
+            const wrapper = document.getElementById('barnaby-svg-wrapper');
+            const speech = document.getElementById('frog-speech-bubble');
+            const label = document.getElementById('frog-sentiment-label');
+            const bpm = document.getElementById('frog-heart-rate');
+
+            let bodyColor = "#7C984C";
+            let eyeDetails = `<circle cx="35" cy="35" r="5" fill="#3D4E5B"/><circle cx="65" cy="35" r="5" fill="#3D4E5B"/>`;
+            let mouthPath = `<path d="M40 62 Q50 68 60 62" stroke="#3D4E5B" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+            let accessories = '';
+            let animationClass = 'animate-breathe';
+
+            if (sentiment === 'joy') {
+                bodyColor = "#8FB352";
+                eyeDetails = `
+                    <text x="28" y="42" font-size="16">❤️</text>
+                    <text x="58" y="42" font-size="16">❤️</text>
+                `;
+                mouthPath = `<path d="M38 58 Q50 72 62 58 Z" fill="#3D4E5B"/>`;
+                speech.innerText = '"Ribbit! Your warm words bring blossoms to my pond!"';
+                label.innerText = "Joyful / Grateful 🌸";
+                label.className = "font-bold text-rose-500";
+                bpm.innerText = "88 bpm • Energetic";
+                animationClass = 'animate-hop';
+            } else if (sentiment === 'melancholy') {
+                bodyColor = "#667C65";
+                eyeDetails = `
+                    <circle cx="35" cy="37" r="4" fill="#3D4E5B"/>
+                    <circle cx="65" cy="37" r="4" fill="#3D4E5B"/>
+                    <path d="M30 30 Q35 34 40 32" stroke="#3D4E5B" stroke-width="2" fill="none"/>
+                    <path d="M60 32 Q65 34 70 30" stroke="#3D4E5B" stroke-width="2" fill="none"/>
+                    <circle cx="70" cy="45" r="2.5" fill="#38BDF8"/>
+                `;
+                mouthPath = `<path d="M40 66 Q50 58 60 66" stroke="#3D4E5B" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+                speech.innerText = '"I feel your fatigue. Take a deep breath with me... Ribbit..."';
+                label.innerText = "Sympathetic / Gentle 💧";
+                label.className = "font-bold text-sky-600";
+                bpm.innerText = "60 bpm • Resting";
+            } else if (sentiment === 'creative') {
+                bodyColor = "#556B2F";
+                accessories = `
+                    <!-- Glasses -->
+                    <circle cx="35" cy="38" r="10" stroke="#3D4E5B" stroke-width="2" fill="none"/>
+                    <circle cx="65" cy="38" r="10" stroke="#3D4E5B" stroke-width="2" fill="none"/>
+                    <line x1="45" y1="38" x2="55" y2="38" stroke="#3D4E5B" stroke-width="2"/>
+                `;
+                speech.innerText = '"A brilliant idea is sprouting! My spectacles are focused!"';
+                label.innerText = "Creative / Focused 💡";
+                label.className = "font-bold text-amber-600";
+                bpm.innerText = "78 bpm • Focused";
+            } else {
+                // Idle
+                speech.innerText = '"Ribbit... I am listening to your thoughts. Type away to awaken my spirits!"';
+                label.innerText = "Peaceful / Idle 🍃";
+                label.className = "font-bold text-emerald-600";
+                bpm.innerText = "72 bpm • Calm";
+            }
+
+            const svg = `
+                <svg viewBox="0 0 100 100" class="w-full h-full ${animationClass}">
+                    <!-- Shadow -->
+                    <ellipse cx="50" cy="85" rx="30" ry="8" fill="#5F7382" opacity="0.2"/>
+                    
+                    <!-- Frog Eyes Backing -->
+                    <circle cx="35" cy="35" r="14" fill="${bodyColor}"/>
+                    <circle cx="65" cy="35" r="14" fill="${bodyColor}"/>
+                    
+                    <!-- Frog Body -->
+                    <ellipse cx="50" cy="60" rx="32" ry="26" fill="${bodyColor}"/>
+                    
+                    <!-- Blush -->
+                    <circle cx="26" cy="56" r="5" fill="#FFB6C1" opacity="0.6"/>
+                    <circle cx="74" cy="56" r="5" fill="#FFB6C1" opacity="0.6"/>
+
+                    <!-- Eyes -->
+                    ${eyeDetails}
+                    
+                    <!-- Mouth -->
+                    ${mouthPath}
+
+                    <!-- Accessories -->
+                    ${accessories}
+                </svg>
+            `;
+
+            wrapper.innerHTML = svg;
+        }
+
+        function handleStudioWritingInput() {
+            const text = document.getElementById('thought-content-input').value.toLowerCase();
+            
+            // Calculate word count & read time
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+            document.getElementById('live-word-count').innerText = words;
+            document.getElementById('live-read-time').innerText = `${Math.ceil(words / 150)} min`;
+
+            // Sentiment Keyword Check
+            if (/\b(grateful|happy|love|peace|smile|joy|blessed|thankful)\b/.test(text)) {
+                renderBarnabyFrog('joy');
+            } else if (/\b(tired|sad|rough|exhausted|heavy|hard|lonely|stress)\b/.test(text)) {
+                renderBarnabyFrog('melancholy');
+            } else if (/\b(build|code|idea|sprout|create|design|growth|learn)\b/.test(text)) {
+                renderBarnabyFrog('creative');
+            } else {
+                renderBarnabyFrog('idle');
+            }
+        }
+
+        /* ==========================================================================
+           THOUGHTS FEED & ARCHIVE RENDERERS
+           ========================================================================== */
+        function renderThoughtsFeed() {
+            const feedContainer = document.getElementById('thoughts-feed');
+            const selectedCategory = document.getElementById('filter-category').value;
+            
+            feedContainer.innerHTML = '';
+
+            const filtered = selectedCategory === 'All' 
+                ? appState.thoughts 
+                : appState.thoughts.filter(t => t.category === selectedCategory);
+
+            if (filtered.length === 0) {
+                feedContainer.innerHTML = `
+                    <div class="cozy-card p-8 text-center text-accent-slate space-y-2">
+                        <i data-lucide="sprout" class="w-8 h-8 mx-auto text-accent-dusty"></i>
+                        <p class="font-bold text-sm text-accent-charcoal">No thoughts planted in this topic yet.</p>
+                        <p class="text-xs">Head over to the Writing Studio to plant your first seed!</p>
+                    </div>`;
+                lucide.createIcons();
+                return;
+            }
+
+            filtered.forEach(thought => {
+                const card = document.createElement('div');
+                card.className = `cozy-card p-5 space-y-3 ${thought.theme || 'texture-paper'} border border-border-mist/80 transition-all hover:shadow-md`;
+                
+                const formattedDate = new Date(thought.timestamp).toLocaleDateString('en-US', {
+                    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full bg-accent-dusty/20 text-accent-charcoal text-xs font-bold border border-accent-dusty/30">
+                            ${thought.category}
+                        </span>
+                        <span class="text-[11px] text-accent-slate/80 font-medium">${formattedDate}</span>
+                    </div>
+
+                    <h3 class="font-bold text-base text-accent-charcoal font-heading">${escapeHtml(thought.title)}</h3>
+                    <p class="text-xs sm:text-sm text-accent-charcoal/90 leading-relaxed">${escapeHtml(thought.content)}</p>
+
+                    ${thought.mediaThumbnails && thought.mediaThumbnails.length > 0 ? `
+                        <div class="pt-2">
+                            <img src="${thought.mediaThumbnails[0]}" class="w-full h-40 object-cover rounded-2xl border border-border-mist">
+                        </div>
+                    ` : ''}
+
+                    <div class="flex items-center justify-between pt-2 border-t border-border-mist/50 text-xs">
+                        <div class="flex items-center gap-1.5 text-accent-slate font-medium">
+                            ${(thought.tags || []).map(tag => `<span class="hover:underline">${tag}</span>`).join(' ')}
+                        </div>
+
+                        <button onclick="resonateThought('${thought.id}')" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 border border-rose-200/60 text-rose-600 font-bold hover:bg-rose-100 transition-colors">
+                            <i data-lucide="heart" class="w-3.5 h-3.5 fill-rose-500"></i>
+                            <span>${thought.resonates || 0} gentle resonates</span>
+                        </button>
+                    </div>
+                `;
+
+                feedContainer.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        function resonateThought(id) {
+            const thought = appState.thoughts.find(t => t.id === id);
+            if (thought) {
+                thought.resonates = (thought.resonates || 0) + 1;
+                saveState();
+            }
+        }
+
+        function renderStreakLedger() {
+            const body = document.getElementById('streak-ledger-body');
+            body.innerHTML = '';
+
+            appState.streakHistory.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-accent-dusty/10 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-2.5 font-bold flex items-center gap-1.5">${row.icon} ${row.day}</td>
+                    <td class="p-2.5 text-accent-slate">${row.date}</td>
+                    <td class="p-2.5 text-emerald-600 font-bold">${row.status}</td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+
+        function renderCompanionsList() {
+            const list = document.getElementById('companions-list');
+            list.innerHTML = '';
+
+            appState.companions.forEach(comp => {
+                const item = document.createElement('div');
+                item.className = "p-3 rounded-2xl bg-white/80 border border-border-mist flex items-center gap-2 text-xs font-bold text-accent-charcoal";
+                
+                if (comp.drawingDataUrl) {
+                    item.innerHTML = `
+                        <img src="${comp.drawingDataUrl}" class="w-7 h-7 object-contain rounded-lg">
+                        <span class="truncate">${escapeHtml(comp.name)}</span>
+                    `;
+                } else {
+                    item.innerHTML = `
+                        <span class="text-base">${comp.avatar || '🌱'}</span>
+                        <span class="truncate">${escapeHtml(comp.name)}</span>
+                    `;
+                }
+                list.appendChild(item);
+            });
+        }
+
+        /* ==========================================================================
+           PUBLISHING & STUDIO ACTIONS
+           ========================================================================== */
+        let attachedStudioImage = null;
+
+        function publishThoughtToGarden() {
+            const titleInput = document.getElementById('thought-title-input');
+            const contentInput = document.getElementById('thought-content-input');
+            const categorySelect = document.getElementById('thought-category');
+
+            const title = titleInput.value.trim() || "Untitled Sanctuary Thought";
+            const content = contentInput.value.trim();
+
+            if (!content) {
+                alert("Please write a gentle thought before sharing with your garden.");
+                return;
+            }
+
+            const newThought = {
+                id: `thought_${Date.now()}`,
+                timestamp: new Date().toISOString(),
+                title: title,
+                content: content,
+                category: categorySelect.value,
+                theme: document.getElementById('studio-paper-box').dataset.theme || 'texture-grid',
+                tags: ['#Reflection', '#GardenStudio'],
+                mediaThumbnails: attachedStudioImage ? [attachedStudioImage] : [],
+                resonates: 1
+            };
+
+            appState.thoughts.unshift(newThought);
+            appState.userProfile.streak += 1;
+            
+            // Reset fields
+            titleInput.value = '';
+            contentInput.value = '';
+            attachedStudioImage = null;
+            document.getElementById('attachment-label').innerText = "Attach Photo";
+
+            saveState();
+            switchTab('garden');
+        }
+
+        function setParchmentTheme(themeName) {
+            const box = document.getElementById('studio-paper-box');
+            box.className = `cozy-card ${themeName} p-6 sm:p-8 rounded-3xl min-h-[500px] flex flex-col justify-between transition-all duration-300 shadow-md`;
+            box.dataset.theme = themeName;
+        }
+
+        function insertPrompt(promptText) {
+            const textarea = document.getElementById('thought-content-input');
+            textarea.value = promptText + textarea.value;
+            textarea.focus();
+            handleStudioWritingInput();
+        }
+
+        /* ==========================================================================
+           PROCEDURAL WEB AUDIO AMBIENT PLAYER (RAIN SOUNDSCAPE)
+           ========================================================================== */
+        let audioCtx = null;
+        let isAudioPlaying = false;
+        let rainNoiseNode = null;
+
+        function toggleAmbientSound() {
+            const btnText = document.getElementById('ambient-audio-text');
+            
+            if (!isAudioPlaying) {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+
+                // Generate pink/white noise for procedural soft rain
+                const bufferSize = audioCtx.sampleRate * 2;
+                const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+
+                rainNoiseNode = audioCtx.createBufferSource();
+                rainNoiseNode.buffer = noiseBuffer;
+                rainNoiseNode.loop = true;
+
+                // Lowpass filter for soft rain timbre
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 800;
+
+                const gain = audioCtx.createGain();
+                gain.gain.value = 0.15;
+
+                rainNoiseNode.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                rainNoiseNode.start();
+                isAudioPlaying = true;
+                btnText.innerText = "Stop Greenhouse Rain";
+            } else {
+                if (rainNoiseNode) {
+                    rainNoiseNode.stop();
+                }
+                isAudioPlaying = false;
+                btnText.innerText = "Play Greenhouse Rain";
+            }
+        }
+
+        /* ==========================================================================
+           FREEHAND HTML5 CANVAS COMPANION DRAWER
+           ========================================================================== */
+        let canvas, ctx, isDrawing = false;
+
+        function initCompanionCanvas() {
+            canvas = document.getElementById('companion-canvas');
+            if (!canvas) return;
+            ctx = canvas.getContext('2d');
+
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+
+            // Touch events
+            canvas.addEventListener('touchstart', (e) => { startDrawing(e.touches[0]); e.preventDefault(); });
+            canvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); });
+            canvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.strokeStyle = document.getElementById('brush-color').value;
+            ctx.lineWidth = document.getElementById('brush-size').value;
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function clearCompanionCanvas() {
+            if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveDrawnCompanion() {
+            const nameInput = document.getElementById('companion-name-input').value.trim() || "Sprout Companion";
+            const dataUrl = canvas.toDataURL();
+
+            const newComp = {
+                id: `comp_${Date.now()}`,
+                name: nameInput,
+                type: "custom_drawing",
+                drawingDataUrl: dataUrl,
+                createdDate: new Date().toISOString()
+            };
+
+            appState.companions.push(newComp);
+            saveState();
+            closeDrawModal();
+        }
+
+        /* Modals & Attachments logic */
+        function openDrawModal() {
+            document.getElementById('modal-draw').classList.remove('hidden');
+            initCompanionCanvas();
+        }
+        function closeDrawModal() {
+            document.getElementById('modal-draw').classList.add('hidden');
+        }
+
+        function openCameraModal() {
+            document.getElementById('modal-camera').classList.remove('hidden');
+        }
+        function closeCameraModal() {
+            document.getElementById('modal-camera').classList.add('hidden');
+        }
+
+        function previewCameraUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('camera-preview-img');
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                    document.getElementById('camera-upload-placeholder').classList.add('hidden');
+                    attachedStudioImage = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function attachCameraToStudio() {
+            if (attachedStudioImage) {
+                document.getElementById('attachment-label').innerText = "Photo Attached ✓";
+            }
+            closeCameraModal();
+            switchTab('studio');
+        }
+
+        function handlePhotoAttachment(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    attachedStudioImage = e.target.result;
+                    document.getElementById('attachment-label').innerText = "Photo Attached ✓";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function toggleArchiveModal(show) {
+            const drawer = document.getElementById('drawer-archive');
+            if (show) {
+                renderArchiveThoughts();
+                drawer.classList.remove('hidden');
+            } else {
+                drawer.classList.add('hidden');
+            }
+        }
+
+        function renderArchiveThoughts() {
+            const list = document.getElementById('archive-thoughts-list');
+            list.innerHTML = '';
+
+            const sorted = [...appState.thoughts].sort((a, b) => (b.resonates || 0) - (a.resonates || 0));
+
+            sorted.forEach(t => {
+                const item = document.createElement('div');
+                item.className = "p-3.5 rounded-2xl bg-slate-50 border border-border-mist space-y-1.5";
+                item.innerHTML = `
+                    <div class="flex items-center justify-between text-xs font-bold text-accent-charcoal">
+                        <span>${escapeHtml(t.title)}</span>
+                        <span class="text-rose-500">❤️ ${t.resonates || 0}</span>
+                    </div>
+                    <p class="text-xs text-accent-slate line-clamp-2">${escapeHtml(t.content)}</p>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function openProfileModal() {
+            alert(`Botanical Sanctuary Profile:\nUser: ${appState.userProfile.name}\nCurrent Streak: ${appState.userProfile.streak} Days\nCurrent Tree Stage: ${appState.userProfile.currentStage}`);
+        }
+
+        function escapeHtml(str) {
+            return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        /* ==========================================================================
+           GLOBAL UI SYNCHRONIZER & APP INITIALIZATION
+           ========================================================================== */
+        function updateUI() {
+            // Header stats
+            document.getElementById('header-streak-count').innerText = appState.userProfile.streak;
+            document.getElementById('stat-streak-count').innerText = `${appState.userProfile.streak} Days`;
+            document.getElementById('stat-thoughts-count').innerText = appState.thoughts.length;
+            document.getElementById('stat-companions-count').innerText = `${appState.companions.length} Nurturing`;
+
+            renderSanctuaryTree();
+            renderThoughtsFeed();
+            renderStreakLedger();
+            renderCompanionsList();
+        }
+
+        // Initialize on Window Load
+        window.onload = function() {
+            lucide.createIcons();
+            updateUI();
+            renderBarnabyFrog('idle');
+            fetchLiveWeather();
+        };
+    </script>
+</body>
+</html>
