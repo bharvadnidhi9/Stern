@@ -6,6 +6,15 @@ Stern
 
 Stern is a mindful note-taking and journaling space designed to make reflection soothing and visual. Instead of overwhelming lists and stressful task managers, this app turns your thoughts, journal entries, and ideas into seeds that bloom into a vibrant virtual garden as you reflect and grow.
 
+## Preview
+
+### Home Page
+
+![Stern home page](Preview/Home%20page.png)
+
+### Writing Studio
+
+![Stern writing studio](Preview/Writing%20studio.png)
 
 🎨 Key Features
 
